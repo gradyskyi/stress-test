@@ -18,7 +18,7 @@ services:
             LARAVEL_SAIL: 1
         volumes:
             - ./:/var/www
-            #- ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
         networks:
             - sail
         depends_on:
