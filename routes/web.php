@@ -1,6 +1,9 @@
 <?php
 
+use Faker\Generator;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*

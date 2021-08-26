@@ -27,3 +27,8 @@ Route::get('/delete-fake-data', function (Request $request) {
     \App\Models\Product::query()->delete();
     return response()->json(['status' => 'ok']);
 });
+
+Route::get('/make-fake-user-data', function (Request $request) {
+    \App\Models\User::factory()->count(10000)->create();
+    return response()->json(['status' => 'ok']);
+});

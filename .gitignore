@@ -1,0 +1,53 @@
+# yii console command
+/yii
+
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+.gulp-scss-cache
+.sass-cache
+/node_modules
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+
+aurorahdr/web/aurorahdr-assets
+macphun/web/aurorahdr-assets
+
+#.DS_Store
+GeoLite2-City.mmdb
+
+.env
+mp.sql
+mp_dump.sql
+package-lock.json
+schema_yii.sql
+yii_2019-08-20.sql
+yii_dump.sql
+docker-compose.override.yml
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
