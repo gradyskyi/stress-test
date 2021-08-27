@@ -23,7 +23,7 @@ services:
             - sail
         depends_on:
             - mysql
-            - redis
+            - redis-master
 
     #Nginx Service
     webserver:
@@ -58,18 +58,37 @@ services:
           test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
           retries: 3
           timeout: 5s
-    redis:
-        image: 'redis:alpine'
-        ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+
+    fix-redis-volume-ownership: # This service is to authorise redis-master with ownership permissions
+        image: 'bitnami/redis:latest'
+        user: root
+        command: chown -R 1001:1001 /bitnami
         volumes:
-            - 'sailredis:/data'
-        networks:
-            - sail
-        healthcheck:
-          test: ["CMD", "redis-cli", "ping"]
-          retries: 3
-          timeout: 5s
+            - ./data/redis:/bitnami
+            - ./data/redis/conf/redis.conf:/opt/bitnami/redis/conf/redis.conf
+
+    redis-master: # Setting up master node
+        image: 'bitnami/redis:latest'
+        ports:
+            - '6329:6379' # Port 6329 will be exposed to handle connections from outside server
+        environment:
+            - REDIS_REPLICATION_MODE=master # Assigning the node as a master
+            - ALLOW_EMPTY_PASSWORD=yes # No password authentication required/ provide password if needed
+        volumes:
+            - ./data/redis:/bitnami # Redis master data volume
+            - ./data/redis/conf/redis.conf:/opt/bitnami/redis/conf/redis.conf # Redis master configuration volume
+
+    redis-replica: # Setting up slave node
+        image: 'bitnami/redis:latest'
+        ports:
+            - '6379' # No port is exposed
+        depends_on:
+            - redis-master # will only start after the master has booted completely
+        environment:
+            - REDIS_REPLICATION_MODE=slave # Assigning the node as slave
+            - REDIS_MASTER_HOST=redis-master # Host for the slave node is the redis-master node
+            - REDIS_MASTER_PORT_NUMBER=6379 # Port number for local
+            - ALLOW_EMPTY_PASSWORD=yes # No password required to connect to node
 
     elasticsearch:
         image: 'docker.elastic.co/elasticsearch/elasticsearch:7.14.0'
