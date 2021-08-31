@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessPodcast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +32,15 @@ Route::get('/delete-fake-data', function (Request $request) {
 Route::get('/make-fake-user-data', function (Request $request) {
     \App\Models\User::factory()->count(10000)->create();
     return response()->json(['status' => 'ok']);
+});
+
+Route::get('/new-job', function (Request $request) {
+    $jobsCount = 10000;
+    $start_time = microtime(TRUE);
+    for($i=0;$i<$jobsCount;$i++) {
+        ProcessPodcast::dispatch();
+    }
+    $end_time = microtime(TRUE);
+
+    return response()->json(['status' => 'ok', 'Jobs per s' => $jobsCount/($end_time - $start_time)]);
 });
