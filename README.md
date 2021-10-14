@@ -34,4 +34,4 @@ siege -b -c8 -v -t20s localhost/products-cache-stampede
 with probabilistic cache invalidation:
 ```
 siege -b -c8 -v -t20s localhost/products-cache-exp
-```
+``` 
